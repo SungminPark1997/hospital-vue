@@ -1,0 +1,131 @@
+/* ===== 전체 레이아웃 ===== */
+.home {
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --border: #e6e8ec;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --brand: #00a2b3;
+
+  padding: 28px;
+  background: var(--bg);
+  min-height: 100vh;
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+/* ===== 헤더 ===== */
+.home__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+.home__title h1 {
+  margin: 0;
+  font-size: 26px;
+}
+.home__subtitle {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* ===== 검색 카드 ===== */
+.search-card {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* ===== 통계 그리드 ===== */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== 통계 카드 ===== */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.stat {
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  background: #fafbff;
+  text-align: center;
+}
+.stat__label {
+  color: var(--muted);
+  font-size: 13px;
+}
+.stat__value {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+.stat__value.ok {
+  color: #0ea5a0;
+}
+.stat__value.warn {
+  color: #d97706;
+}
+
+/* ===== 그래프 카드 ===== */
+.graph-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== 최근 병원 카드 ===== */
+.recent-section {
+  margin-top: 20px;
+}
+
+/* ===== 버튼 공통 ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: var(--brand);
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+.btn:hover {
+  background: #0093a2;
+}
+.btn.ghost {
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn.sm {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+/* ===== 로딩 중앙 표시 ===== */
+.loading-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+}
