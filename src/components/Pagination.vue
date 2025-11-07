@@ -1,6 +1,6 @@
 <template>
   <nav class="pagination">
-    <PageButton :disabled="page === 1" @click="$emit('change', page - 1)">
+    <PageButton :disabled="page === 1" @click="emit('change', page - 1)">
       ◀ 이전
     </PageButton>
 
@@ -8,7 +8,7 @@
       v-for="p in pages"
       :key="p"
       :active="p === page"
-      @click="$emit('change', p)"
+      @click="emit('change', p)"
       class="num"
     >
       {{ p }}
@@ -16,7 +16,7 @@
 
     <PageButton
       :disabled="page === totalPages"
-      @click="$emit('change', page + 1)"
+      @click="emit('change', page + 1)"
     >
       다음 ▶
     </PageButton>
@@ -30,6 +30,10 @@ import PageButton from "./PageButton.vue";
 const props = defineProps<{
   page: number;
   totalPages: number;
+}>();
+
+const emit = defineEmits<{
+  (e: "change", page: number): void;
 }>();
 
 const pages = computed(() => {

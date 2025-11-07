@@ -14,159 +14,20 @@
         class="btn btn-primary d-flex align-items-center gap-1 ms-3"
         @click="openAddModal"
       >
-        <i class="bi bi-plus-circle"></i>
         병원 추가
       </button>
     </div>
 
     <!-- 📋 목록 -->
-    <div class="table-responsive">
-      <table class="table table-hover align-middle text-center">
-        <thead class="table-light">
-          <tr>
-            <th @click="sortBy('id')" style="cursor: pointer">
-              ID
-              <BIconCaretUpFill
-                v-if="sortKey === 'id' && sortOrder === 'ASC'"
-                class="ms-1"
-              />
-              <BIconCaretDownFill
-                v-if="sortKey === 'id' && sortOrder === 'DESC'"
-                class="ms-1"
-              />
-            </th>
-
-            <th @click="sortBy('biz_name')" style="cursor: pointer">
-              병원명
-              <BIconCaretUpFill
-                v-if="sortKey === 'biz_name' && sortOrder === 'ASC'"
-                class="ms-1"
-              />
-              <BIconCaretDownFill
-                v-if="sortKey === 'biz_name' && sortOrder === 'DESC'"
-              />
-            </th>
-
-            <th @click="sortBy('biz_type')" style="cursor: pointer">
-              병원종류
-              <i
-                v-if="sortKey === 'biz_type'"
-                :class="
-                  sortOrder === 'ASC'
-                    ? 'bi bi-caret-up-fill'
-                    : 'bi bi-caret-down-fill'
-                "
-                class="ms-1"
-              ></i>
-            </th>
-
-            <th @click="sortBy('detail_status_name')" style="cursor: pointer">
-              상태
-              <i
-                v-if="sortKey === 'detail_status_name'"
-                :class="
-                  sortOrder === 'ASC'
-                    ? 'bi bi-caret-up-fill'
-                    : 'bi bi-caret-down-fill'
-                "
-                class="ms-1"
-              ></i>
-            </th>
-
-            <th @click="sortBy('tel')" style="cursor: pointer">
-              전화번호
-              <i
-                v-if="sortKey === 'tel'"
-                :class="
-                  sortOrder === 'ASC'
-                    ? 'bi bi-caret-up-fill'
-                    : 'bi bi-caret-down-fill'
-                "
-                class="ms-1"
-              ></i>
-            </th>
-
-            <th @click="sortBy('road_addr')" style="cursor: pointer">
-              도로명 주소
-              <i
-                v-if="sortKey === 'road_addr'"
-                :class="
-                  sortOrder === 'ASC'
-                    ? 'bi bi-caret-up-fill'
-                    : 'bi bi-caret-down-fill'
-                "
-                class="ms-1"
-              ></i>
-            </th>
-
-            <th @click="sortBy('created_at')" style="cursor: pointer">
-              등록일
-              <i
-                v-if="sortKey === 'created_at'"
-                :class="
-                  sortOrder === 'ASC'
-                    ? 'bi bi-caret-up-fill'
-                    : 'bi bi-caret-down-fill'
-                "
-                class="ms-1"
-              ></i>
-            </th>
-
-            <th @click="sortBy('updated_at')" style="cursor: pointer">
-              수정일
-              <i
-                v-if="sortKey === 'updated_at'"
-                :class="
-                  sortOrder === 'ASC'
-                    ? 'bi bi-caret-up-fill'
-                    : 'bi bi-caret-down-fill'
-                "
-                class="ms-1"
-              ></i>
-            </th>
-
-            <th>삭제</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="h in hospitals" :key="h.id" @click="clickHospital(h)">
-            <td>{{ h.id }}</td>
-            <td class="fw-semibold">{{ h.bizName }}</td>
-            <td>{{ h.bizType }}</td>
-            <td>
-              <span
-                class="badge"
-                :class="{
-                  'bg-success': h.detailStatusName === '영업중',
-                  'bg-secondary': h.detailStatusName !== '영업중',
-                }"
-              >
-                {{ h.detailStatusName || "-" }}
-              </span>
-            </td>
-            <td>{{ h.tel || "-" }}</td>
-            <td class="text-start">
-              {{ h.roadAddr || h.lotAddr || "주소 없음" }}
-            </td>
-            <td>{{ formatDate(h?.createdAt) }}</td>
-            <td>{{ formatDate(h?.updatedAt) }}</td>
-            <td>
-              <!-- 🗑 삭제 버튼 -->
-              <button
-                class="btn btn-outline-danger btn-sm"
-                @click.stop="deleteHospitalById(h.id)"
-              >
-                삭제
-              </button>
-            </td>
-          </tr>
-
-          <tr v-if="!isLoading && hospitals.length === 0">
-            <td colspan="9" class="text-muted py-4">검색 결과가 없습니다.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <Table
+      :hospitals="hospitals"
+      :isLoading="isLoading"
+      :sortKey="sortKey"
+      :sortOrder="sortOrder"
+      @sort="sortBy"
+      @select="clickHospital"
+      @delete="deleteHospitalById"
+    />
 
     <!-- 페이지네이션 -->
     <Pagination
@@ -191,7 +52,6 @@ import Pagination from "../components/Pagination.vue";
 import SearchBar from "../components/SearchBar.vue";
 import { useHospitalSearch } from "../composables/useHospitalSearch";
 import { ref } from "vue";
-import { formatDate } from "../utils/date";
 import {
   createHospital,
   deleteHospital,
@@ -200,11 +60,7 @@ import {
   type HospitalCreateRequest,
 } from "../api/hospitalApi";
 import HospitalFormModal from "../components/modal/HospitalFormModal.vue";
-import {
-  BIcon0Circle,
-  BIconCaretDownFill,
-  BIconCaretUpFill,
-} from "bootstrap-icons-vue";
+import Table from "../components/Table.vue";
 
 // composable 호출
 const {

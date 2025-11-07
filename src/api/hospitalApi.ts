@@ -37,9 +37,6 @@ export interface HospitalCreateRequest {
   ycoord?: number | null;
 }
 
-export interface HospitalUpdateRequest extends HospitalCreateRequest {
-  id: number; // 수정 시에는 반드시 있어야 함
-}
 export interface SearchResponse {
   content: Hospital[];
   total: number;
