@@ -1,4 +1,9 @@
 import api from "./axios";
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
 
 export interface Stats {
   total: number;
@@ -45,27 +50,27 @@ export interface SearchResponse {
   totalPages: number;
 }
 export type Status = "" | "OPEN" | "CLOSED";
-
+// 병원 통계
 export async function getHospitalStats(): Promise<Stats> {
-  const { data } = await api.get<Stats>("/hospitals/stats");
-  console.log("병원 통계 데이터:", data);
-  return data;
+  const { data } = await api.get<ApiResponse<Stats>>("/hospitals/stats");
+  return data.data; // ✅ ApiResponse 안의 data 반환
 }
 
+// 최근 등록 병원
 export async function getRecentHospitals(): Promise<Hospital[]> {
-  const { data } = await api.get<Hospital[]>("/hospitals/recent");
-  console.log("최근 등록 병원 데이터:", data);
-  return data;
+  const { data } = await api.get<ApiResponse<Hospital[]>>("/hospitals/recent");
+  return data.data;
 }
 
+// 검색
 export async function getSearchHospitals(
   keyword: string,
   region: string,
   status: string,
   page = 1,
   size = 10,
-  sortKey = "created_at", // ✅ 기본값
-  sortOrder = "DESC" // ✅ 기본값
+  sortKey = "created_at",
+  sortOrder = "DESC"
 ): Promise<SearchResponse> {
   const params: Record<string, string | number> = {
     page,
@@ -73,43 +78,45 @@ export async function getSearchHospitals(
     sortKey,
     sortOrder,
   };
-
   if (keyword) params.keyword = keyword;
   if (region) params.region = region;
   if (status) params.status = status;
 
-  const { data } = await api.get<SearchResponse>("/hospitals/search", {
-    params,
-  });
+  const { data } = await api.get<ApiResponse<SearchResponse>>(
+    "/hospitals/search",
+    { params }
+  );
+  return data.data;
+}
+
+// 등록
+export async function createHospital(
+  hospital: HospitalCreateRequest
+): Promise<ApiResponse<null>> {
+  const { data } = await api.post<ApiResponse<null>>("/hospitals", hospital);
   return data;
 }
 
-export async function createHospital(
+// 수정
+export async function updateHospital(
+  id: number,
   hospital: HospitalCreateRequest
-): Promise<{ success: boolean; message: string }> {
-  const { data } = await api.post<{ success: boolean; message: string }>(
-    "/hospitals",
+): Promise<ApiResponse<null>> {
+  const { data } = await api.put<ApiResponse<null>>(
+    `/hospitals/${id}`,
     hospital
   );
   return data;
 }
 
-export async function updateHospital(
-  id: number,
-  hospital: HospitalCreateRequest // 수정 내용
-): Promise<{ success: boolean; message: string }> {
-  const { data } = await api.put<{ success: boolean; message: string }>(
-    `/hospitals/${id}`, // ✅ 수정 대상 식별
-    hospital // ✅ 수정할 내용 전달
-  );
+// 삭제
+export async function deleteHospital(id: number): Promise<ApiResponse<null>> {
+  const { data } = await api.delete<ApiResponse<null>>(`/hospitals/${id}`);
   return data;
 }
 
-export async function deleteHospital(
-  id: number
-): Promise<{ success: boolean; message: string }> {
-  const { data } = await api.delete<{ success: boolean; message: string }>(
-    `/hospitals/${id}` // ✅ 삭제 대상 id
-  );
-  return data;
+// 액티브 병원
+export async function getActiveHospitals(): Promise<Hospital[]> {
+  const { data } = await api.get<ApiResponse<Hospital[]>>("/hospitals/active");
+  return data.data;
 }

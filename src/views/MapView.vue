@@ -3,41 +3,33 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
+import { getActiveHospitals } from "../api/hospitalApi";
+import type { Hospital } from "../api/hospitalApi";
+import { useKakaoMap } from "../composables/useKaKaoMap";
 
-onMounted(() => {
-  // 1️⃣ Kakao Map SDK 스크립트 동적 로드
-  const script = document.createElement("script");
-  script.src =
-    "//dapi.kakao.com/v2/maps/sdk.js?appkey=6051d465fa0e2eb2534336d0fcf53341&autoload=false"; // autoload=false 중요
-  document.head.appendChild(script);
+const activeHospitals = ref<Hospital[]>([]);
 
-  // 2️⃣ 스크립트 로드 후 실행
-  script.onload = () => {
-    window.kakao.maps.load(() => {
-      const container = document.getElementById("map");
-      const options = {
-        center: new window.kakao.maps.LatLng(37.5665, 126.978), // 서울 좌표
-        level: 3, // 확대 레벨 (1~14)
-      };
+onMounted(async () => {
+  // 1️⃣ 병원 데이터 가져오기
+  activeHospitals.value = await getActiveHospitals();
+  console.log("🏥 병원 데이터:", activeHospitals.value.length);
 
-      const map = new window.kakao.maps.Map(container, options);
+  // 2️⃣ 좌표가 있는 병원만 필터링
+  const validHospitals = activeHospitals.value.filter(
+    (h) => h.xcoord !== null && h.ycoord !== null
+  );
 
-      // 3️⃣ 마커 예시
-      const markerPosition = new window.kakao.maps.LatLng(37.5665, 126.978);
-      const marker = new window.kakao.maps.Marker({
-        position: markerPosition,
-      });
-      marker.setMap(map);
+  // 3️⃣ KakaoMap용 마커 리스트 생성
+  const markerList = validHospitals.map((h) => ({
+    lat: Number(h.ycoord),
+    lng: Number(h.xcoord),
+    markerText: h.bizName,
+  }));
 
-      // 4️⃣ 마커 클릭 이벤트
-      const info = new window.kakao.maps.InfoWindow({
-        content: '<div style="padding:5px;">서울시청</div>',
-      });
-      window.kakao.maps.event.addListener(marker, "click", () => {
-        info.open(map, marker);
-      });
-    });
-  };
+  console.log("📍 유효 마커 개수:", markerList.length);
+
+  // 4️⃣ 지도 렌더링 (DOM 준비 완료 시점)
+  useKakaoMap("map", markerList);
 });
 </script>

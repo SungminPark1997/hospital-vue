@@ -28,12 +28,16 @@ import { loginUser } from "../api/userApi";
 import { useAuthStore } from "../store/authStore";
 import BaseButton from "../components/BaseButton.vue";
 
+// 유저 아이디/비밀번호
 const username = ref("");
 const password = ref("");
 const error = ref("");
 const router = useRouter();
+
+// 로그인 여부 상태 관리 스토어
 const auth = useAuthStore();
 
+// 로그인 처리 함수
 const login = async () => {
   try {
     const res = await loginUser({
