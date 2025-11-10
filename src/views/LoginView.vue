@@ -27,15 +27,17 @@ import { useRouter } from "vue-router";
 import { loginUser } from "../api/userApi";
 import { useAuthStore } from "../store/authStore";
 import BaseButton from "../components/BaseButton.vue";
+import { useErrorHandler } from "../composables/useErrorHandlerts";
 
 // 유저 아이디/비밀번호
 const username = ref("");
 const password = ref("");
-const error = ref("");
+
 const router = useRouter();
 
 // 로그인 여부 상태 관리 스토어
 const auth = useAuthStore();
+const { error, throwError } = useErrorHandler();
 
 // 로그인 처리 함수
 const login = async () => {
@@ -46,16 +48,15 @@ const login = async () => {
     });
 
     if (res.success === false) {
-      error.value = "로그인 실패. 아이디 또는 비밀번호를 확인하세요.";
+      throwError(new Error(res.message), "로그인 실패");
     } else {
-      localStorage.setItem("token", res.token);
-      auth.login(res.token, res.username, res.role);
+      localStorage.setItem("token", res.token); // 로그인 성공하면 localstorage에 토큰 저장 (나중에는 http only 쿠키로 바꿔야 할듯)
+      auth.login(res.token, res.username, res.role); // 스토어에 로그인 상태 반영
       alert("로그인 성공!");
       router.push("/");
     }
   } catch (err) {
-    console.error(err);
-    error.value = "로그인 중 오류가 발생했습니다.";
+    throwError(err, "로그인 실패");
   }
 };
 </script>

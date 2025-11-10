@@ -6,6 +6,7 @@ import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
 
 import { useAuthStore } from "../store/authStore";
+import MyPageView from "../views/MyPageView.vue";
 const routes = [
   {
     path: "/",
@@ -34,6 +35,12 @@ const routes = [
     name: "register",
     component: RegisterView,
   },
+  {
+    path: "/mypage",
+    name: "mypage",
+    component: MyPageView,
+    meta: { requiredAuth: true },
+  },
 ];
 
 const router = createRouter({
@@ -48,7 +55,9 @@ router.beforeEach((to, from, next) => {
     alert("접근 권한이 없습니다.");
     return next("/");
   }
-
+  if (to.path === "/login" && auth.isLoggedIn) {
+    return next("/"); // 홈으로 리다이렉트
+  }
   if (to.meta.requiredAuth && !auth.isLoggedIn) {
     alert("로그인이 필요합니다.");
     return next("/login");
