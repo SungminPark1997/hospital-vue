@@ -18,7 +18,7 @@
 .home__header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   margin-bottom: 24px;
 }
 .home__title h1 {
@@ -30,7 +30,11 @@
   color: var(--muted);
   font-size: 15px;
 }
-
+.home__visit {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
 /* ===== 검색 카드 ===== */
 .search-card {
   display: flex;

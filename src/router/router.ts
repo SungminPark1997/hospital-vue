@@ -2,11 +2,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import Management from "../views/ManagementView.vue";
 import Map from "../views/MapView.vue";
-import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
-
 import { useAuthStore } from "../store/authStore";
 import MyPageView from "../views/MyPageView.vue";
+import LoginView from "../views/LoginView.vue";
 const routes = [
   {
     path: "/",
@@ -52,6 +51,7 @@ router.beforeEach((to, from, next) => {
   const auth = useAuthStore();
 
   if (to.meta.roles && !to.meta.roles.includes(auth.role ?? "")) {
+    console.log(auth.role);
     alert("접근 권한이 없습니다.");
     return next("/");
   }

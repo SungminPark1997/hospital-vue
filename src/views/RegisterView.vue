@@ -2,18 +2,23 @@
   <div class="auth-container">
     <h2>회원가입</h2>
     <form @submit.prevent="register">
-      <input v-model="username" placeholder="아이디" required />
-      <input v-model="name" placeholder="이름" required />
-      <input
+      <BaseInput
+        v-model="username"
+        label="아이디"
+        placeholder="아이디를 입력하세요"
+      />
+      <BaseInput v-model="name" label="이름" placeholder="이름을 입력하세요" />
+      <BaseInput
         v-model="password"
         type="password"
-        placeholder="비밀번호"
-        required
+        label="비밀번호"
+        placeholder="비밀번호를 입력하세요"
       />
+
       <BaseButton type="submit" color="success">회원가입</BaseButton>
     </form>
 
-    <p>
+    <p class="mt-3">
       이미 계정이 있으신가요?
       <router-link to="/login">로그인</router-link>
     </p>
@@ -27,7 +32,9 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { registerUser } from "../api/userApi";
 import BaseButton from "../components/BaseButton.vue";
-
+import BaseInput from "../components/BaseInput.vue";
+import { useErrorHandler } from "../composables/useErrorHandlers";
+const { error, throwError } = useErrorHandler();
 const username = ref("");
 const name = ref("");
 const password = ref("");
@@ -49,8 +56,8 @@ const register = async () => {
       message.value = "회원가입 실패. 이미 존재하는 아이디일 수 있습니다.";
     }
   } catch (err) {
-    console.error("회원가입 오류:", err);
-    message.value = "회원가입 중 오류가 발생했습니다.";
+    throwError(err, "회원가입 실패");
+    message.value = error.value;
   }
 };
 </script>
@@ -62,12 +69,6 @@ const register = async () => {
   padding: 25px;
   border: 1px solid #ddd;
   border-radius: 10px;
-}
-input {
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
 }
 .msg {
   color: #007bff;

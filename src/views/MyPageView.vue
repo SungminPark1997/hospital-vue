@@ -41,10 +41,9 @@ const auth = useAuthStore();
 const router = useRouter();
 
 const logout = () => {
-  auth.$reset();
-  localStorage.clear();
+  auth.logout();
   alert("로그아웃 되었습니다.");
-  router.push("/");
+  router.push("/login");
 };
 
 const editProfile = () => {

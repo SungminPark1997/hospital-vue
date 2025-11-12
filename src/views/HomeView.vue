@@ -8,6 +8,14 @@
           빠르게 검색하고, 현황을 한눈에 보고, 관리까지 한 번에.
         </p>
       </div>
+      <div class="home__visit">
+        <BaseCard>
+          <StatItem label="전체 방문객수" :value="allVisits" color="ok"
+        /></BaseCard>
+        <BaseCard>
+          <StatItem label="오늘 방문객수" :value="todayVisits"
+        /></BaseCard>
+      </div>
     </header>
 
     <!-- 검색 영역 -->
@@ -39,20 +47,7 @@
     <!-- 통계 + 그래프 -->
     <section class="grid stats-section">
       <BaseCard>
-        <div class="stats">
-          <div class="stat">
-            <div class="stat__label">전체 병원</div>
-            <div class="stat__value">{{ stats.total }}</div>
-          </div>
-          <div class="stat">
-            <div class="stat__label">운영 중</div>
-            <div class="stat__value ok">{{ stats.open }}</div>
-          </div>
-          <div class="stat">
-            <div class="stat__label">휴업 중</div>
-            <div class="stat__value warn">{{ stats.closed }}</div>
-          </div>
-        </div>
+        <BaseStats :stats="stats" />
       </BaseCard>
 
       <BaseCard class="graph-card">
@@ -71,7 +66,7 @@
     </BaseCard>
 
     <!-- 모달 -->
-    <Modal
+    <HospitalInfModal
       v-if="selectedHospital"
       :hospital="selectedHospital"
       @close="closeModal"
@@ -91,7 +86,6 @@ import "../assets/styles/home.css";
 import { ref, onMounted } from "vue";
 
 import SearchBar from "../components/SearchBar.vue";
-import Modal from "../components/modal/HospitalInfModal.vue";
 import ProgressBar from "../components/ProgressBar.vue";
 import BaseCard from "../components/BaseCard.vue";
 import HospitalList from "../components/HospitalList.vue";
@@ -102,6 +96,10 @@ import {
   type Hospital,
 } from "../api/hospitalApi";
 import { useHospitalSearch } from "../composables/useHospitalSearch";
+import BaseStats from "../components/BaseStats.vue";
+import HospitalInfModal from "../components/modal/HospitalInfModal.vue";
+import { getAllVisits, getTodayVisits } from "../api/visitApi";
+import StatItem from "../components/StatItem.vue";
 
 const {
   keyword,
@@ -120,8 +118,9 @@ const recentHospitals = ref<Hospital[]>([]);
 const selectedHospital = ref<Hospital | null>(null);
 const hasSearched = ref(false);
 const stats = ref({ total: 0, open: 0, closed: 0 });
-
-// ✅ 검색 실행
+const todayVisits = ref(0);
+const allVisits = ref(0);
+// 검색 실행
 const onSearch = async (payload: {
   keyword: string;
   region: string;
@@ -131,19 +130,28 @@ const onSearch = async (payload: {
   hasSearched.value = true;
 };
 
-// ✅ 페이지 변경
-
-// ✅ 모달
+// 모달 열기
 const openModal = (hospital: Hospital) => {
+  console.log("모달 열기:", hospital.bizName);
   selectedHospital.value = hospital;
 };
 const closeModal = () => {
   selectedHospital.value = null;
 };
 
-// ✅ 초기 데이터 로드
+// 초기 데이터 로드
 onMounted(async () => {
   stats.value = await getHospitalStats();
   recentHospitals.value = await getRecentHospitals();
+
+  const todayRes = await getTodayVisits();
+  const allRes = await getAllVisits();
+
+  if (todayRes.success) {
+    todayVisits.value = todayRes?.count;
+  }
+  if (allRes.success) {
+    allVisits.value = allRes.count;
+  }
 });
 </script>

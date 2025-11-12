@@ -1,114 +1,31 @@
 <template>
   <div class="table-responsive">
-    <table class="table table-hover align-middle text-center">
-      <thead class="table-light">
+    <table class="table table-hover align-middle text-center hospital-table">
+      <thead class="table-light align-middle">
         <tr>
-          <th @click="$emit('sort', 'id')" style="cursor: pointer">
-            ID
-            <BIconCaretUpFill
-              v-if="sortKey === 'id' && sortOrder === 'ASC'"
-              class="ms-1"
-            />
-            <BIconCaretDownFill
-              v-if="sortKey === 'id' && sortOrder === 'DESC'"
-              class="ms-1"
-            />
-          </th>
-
-          <th @click="$emit('sort', 'biz_name')" style="cursor: pointer">
-            병원명
-            <BIconCaretUpFill
-              v-if="sortKey === 'biz_name' && sortOrder === 'ASC'"
-              class="ms-1"
-            />
-            <BIconCaretDownFill
-              v-if="sortKey === 'biz_name' && sortOrder === 'DESC'"
-              class="ms-1"
-            />
-          </th>
-
-          <th @click="$emit('sort', 'biz_type')" style="cursor: pointer">
-            병원종류
-            <i
-              v-if="sortKey === 'biz_type'"
-              :class="
-                sortOrder === 'ASC'
-                  ? 'bi bi-caret-up-fill'
-                  : 'bi bi-caret-down-fill'
-              "
-              class="ms-1"
-            ></i>
-          </th>
-
           <th
-            @click="$emit('sort', 'detail_status_name')"
-            style="cursor: pointer"
+            v-for="header in headers"
+            :key="header.key"
+            :style="{ width: header.width }"
+            @click="$emit('sort', header.key)"
+            class="sortable-header"
           >
-            상태
-            <i
-              v-if="sortKey === 'detail_status_name'"
-              :class="
-                sortOrder === 'ASC'
-                  ? 'bi bi-caret-up-fill'
-                  : 'bi bi-caret-down-fill'
-              "
-              class="ms-1"
-            ></i>
+            <span
+              class="d-inline-flex align-items-center justify-content-center"
+            >
+              <span class="header-label">{{ header.label }}</span>
+              <span class="sort-icon ms-1">
+                <BIconCaretUpFill
+                  v-if="sortKey === header.key && sortOrder === 'ASC'"
+                />
+                <BIconCaretDownFill
+                  v-if="sortKey === header.key && sortOrder === 'DESC'"
+                />
+                <span v-else class="icon-placeholder"></span>
+              </span>
+            </span>
           </th>
-
-          <th @click="$emit('sort', 'tel')" style="cursor: pointer">
-            전화번호
-            <i
-              v-if="sortKey === 'tel'"
-              :class="
-                sortOrder === 'ASC'
-                  ? 'bi bi-caret-up-fill'
-                  : 'bi bi-caret-down-fill'
-              "
-              class="ms-1"
-            ></i>
-          </th>
-
-          <th @click="$emit('sort', 'road_addr')" style="cursor: pointer">
-            도로명 주소
-            <i
-              v-if="sortKey === 'road_addr'"
-              :class="
-                sortOrder === 'ASC'
-                  ? 'bi bi-caret-up-fill'
-                  : 'bi bi-caret-down-fill'
-              "
-              class="ms-1"
-            ></i>
-          </th>
-
-          <th @click="$emit('sort', 'created_at')" style="cursor: pointer">
-            등록일
-            <i
-              v-if="sortKey === 'created_at'"
-              :class="
-                sortOrder === 'ASC'
-                  ? 'bi bi-caret-up-fill'
-                  : 'bi bi-caret-down-fill'
-              "
-              class="ms-1"
-            ></i>
-          </th>
-
-          <th @click="$emit('sort', 'updated_at')" style="cursor: pointer">
-            수정일
-            <i
-              v-if="sortKey === 'updated_at'"
-              :class="
-                sortOrder === 'ASC'
-                  ? 'bi bi-caret-up-fill'
-                  : 'bi bi-caret-down-fill'
-              "
-              class="ms-1"
-            ></i>
-          </th>
-
-          <th>삭제</th>
+          <th style="width: 80px">삭제</th>
         </tr>
       </thead>
 
@@ -120,7 +37,9 @@
           style="cursor: pointer"
         >
           <td>{{ h.id }}</td>
-          <td class="fw-semibold">{{ h.bizName }}</td>
+          <td class="fw-semibold text-truncate" title="병원명">
+            {{ h.bizName }}
+          </td>
           <td>{{ h.bizType }}</td>
           <td>
             <span
@@ -134,11 +53,11 @@
             </span>
           </td>
           <td>{{ h.tel || "-" }}</td>
-          <td class="text-start">
+          <td class="text-start text-truncate" title="주소">
             {{ h.roadAddr || h.lotAddr || "주소 없음" }}
           </td>
-          <td>{{ formatDate(h.createdAt) }}</td>
-          <td>{{ formatDate(h.updatedAt) }}</td>
+          <td class="small-text">{{ formatDate(h.createdAt) }}</td>
+          <td class="small-text">{{ formatDate(h.updatedAt) }}</td>
           <td>
             <button
               class="btn btn-outline-danger btn-sm"
@@ -174,4 +93,73 @@ defineEmits<{
   (e: "select", hospital: Hospital): void;
   (e: "delete", id: number): void;
 }>();
+
+// ✅ 고정 폭 지정
+const headers = [
+  { key: "id", label: "ID", width: "60px" },
+  { key: "biz_name", label: "병원명", width: "150px" },
+  { key: "biz_type", label: "종류", width: "100px" },
+  { key: "detail_status_name", label: "상태", width: "90px" },
+  { key: "tel", label: "전화번호", width: "130px" },
+  { key: "road_addr", label: "도로명 주소", width: "260px" },
+  { key: "created_at", label: "등록일", width: "120px" },
+  { key: "updated_at", label: "수정일", width: "120px" },
+];
 </script>
+
+<style scoped>
+.hospital-table {
+  table-layout: fixed; /* ✅ 셀 폭 고정 */
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.hospital-table th,
+.hospital-table td {
+  vertical-align: middle;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 헤더 클릭시 색상 효과 */
+.sortable-header {
+  user-select: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.sortable-header:hover {
+  color: #0d6efd;
+}
+
+/*  제목 및 아이콘 정렬 */
+.header-label {
+  font-weight: 500;
+}
+
+.sort-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+}
+
+.icon-placeholder {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  opacity: 0;
+}
+
+/* 등록일, 수정일 글자 크기 축소 */
+.small-text {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+/* hover 효과 */
+.table-hover tbody tr:hover {
+  background-color: #f8f9fa;
+}
+</style>

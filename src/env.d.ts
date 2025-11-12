@@ -10,7 +10,7 @@ import "vue-router";
 
 declare module "vue-router" {
   interface RouteMeta {
-    requiresAuth?: boolean; // (선택) 로그인 여부 검사용
-    roles?: string[]; // ✅ roles 속성 정의
+    requiresAuth?: boolean; // 로그인 여부 검사용
+    roles?: string[]; //  roles 속성 정의
   }
 }

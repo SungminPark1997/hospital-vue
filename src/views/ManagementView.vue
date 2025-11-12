@@ -1,6 +1,6 @@
 <template>
   <div class="hospital-table">
-    <!-- 🔍 검색 + 추가 -->
+    <!--  검색 + 추가 -->
     <div class="d-flex justify-content-between align-items-center mb-3">
       <SearchBar
         v-model="keyword"
@@ -18,7 +18,7 @@
       </button>
     </div>
 
-    <!-- 📋 목록 -->
+    <!--  목록 -->
     <Table
       :hospitals="hospitals"
       :isLoading="isLoading"
@@ -37,7 +37,7 @@
       @change="onPageChange"
     />
 
-    <!-- ✅ 병원 추가 모달 -->
+    <!-- 병원 추가 모달 -->
     <HospitalFormModal
       v-if="isAddModalOpen"
       :isEdit="isEdit"
@@ -76,10 +76,10 @@ const {
   clearSearch,
   onPageChange,
   sortKey,
-  sortOrder, // ✅ useHospitalSearch에서 가져옴
+  sortOrder, // useHospitalSearch에서 가져옴
 } = useHospitalSearch();
 
-// ✅ 병원 추가 모달 상태
+// 병원 추가 모달 상태
 const isAddModalOpen = ref(false);
 const isEdit = ref(false);
 const editHospital = ref<Hospital | null>(null);
@@ -93,7 +93,7 @@ const clickHospital = (h: Hospital) => {
 const openAddModal = () => (isAddModalOpen.value = true);
 const closeAddModal = () => (isAddModalOpen.value = false);
 
-// ✅ 정렬 핸들러 (서버 호출 기반)
+//  정렬 핸들러 (서버 호출 기반) 주소만 좀 엉망
 const sortBy = (key: string) => {
   // 같은 컬럼을 다시 클릭하면 오름/내림 토글
   if (sortKey.value === key) {
@@ -140,7 +140,6 @@ const handleAddHospital = async (data: Hospital) => {
 
   try {
     let res;
-
     if (isEdit.value && editHospital.value?.id) {
       res = await updateHospital(editHospital.value.id, newHospital);
       if (res.success) alert("✏️ 병원 정보가 성공적으로 수정되었습니다.");
@@ -157,10 +156,10 @@ const handleAddHospital = async (data: Hospital) => {
       }
     }
 
-    // ✅ 등록 또는 수정 후 목록 새로고침
+    //  등록 또는 수정 후 목록 새로고침
     await searchHospitals({ keyword: "", region: "", status: "" }, 1);
 
-    // ✅ 모달 닫기 및 상태 초기화
+    //  모달 닫기 및 상태 초기화
     isAddModalOpen.value = false;
     isEdit.value = false;
     editHospital.value = null;

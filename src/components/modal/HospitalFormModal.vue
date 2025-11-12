@@ -89,7 +89,7 @@
             <label class="form-label">X 좌표</label>
             <input
               type="number"
-              step="0.0001"
+              step="any"
               v-model.number="form.xcoord"
               class="form-control"
               placeholder="예: 203895.66"
@@ -99,7 +99,7 @@
             <label class="form-label">Y 좌표</label>
             <input
               type="number"
-              step="0.0001"
+              step="any"
               v-model.number="form.ycoord"
               class="form-control"
               placeholder="예: 457580.99"

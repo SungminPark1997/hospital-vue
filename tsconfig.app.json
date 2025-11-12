@@ -2,7 +2,8 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "types": ["vite/client"],
+    "types": ["vite/client", "bootstrap-vue-3"],
+    "typeRoots": ["./node_modules/@types", "./src/types"],
 
     /* Linting */
     "strict": true,

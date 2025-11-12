@@ -28,18 +28,23 @@
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/authStore";
 import BaseButton from "../components/BaseButton.vue";
-
+import { onMounted, onUnmounted } from "vue";
+console.log("Header setup 실행됨");
+onMounted(() => console.log("🟢 Header Mounted"));
+onUnmounted(() => console.log("🔴 Header Unmounted"));
 const router = useRouter();
 const auth = useAuthStore();
 
-const goLogin = () => router.push("/login");
+const goLogin = () => {
+  console.log("로그인페이지 이동");
+  router.push("/login");
+};
+
 const goRegister = () => router.push("/register");
 const goMyPage = () => router.push("/mypage");
 
 const logout = () => {
-  auth.$reset();
-  localStorage.removeItem("token");
-  alert("로그아웃 되었습니다.");
+  auth.logout();
   router.push("/login");
 };
 </script>

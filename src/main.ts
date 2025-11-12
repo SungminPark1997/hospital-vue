@@ -1,20 +1,23 @@
 // main.js
 import { createApp } from "vue";
-import { createPinia } from "pinia"; // ✅ Pinia 임포트
-import "../src/assets/styles/global.css";
+import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router/router";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
+
+// ✅ 전역 스타일
+import "../src/assets/styles/global.css";
+import "bootstrap/dist/css/bootstrap.min.css"; // ✅ CSS만 가져오기
+import "bootstrap-icons/font/bootstrap-icons.css"; // ✅ 아이콘용 CSS
+import "bootstrap-vue-3/dist/bootstrap-vue-3.css"; // ✅ 필수! (누락되면 모달 안뜸)
+
+// ✅ 라이브러리
 import { BootstrapIconsPlugin } from "bootstrap-icons-vue";
+import BootstrapVue3 from "bootstrap-vue-3";
 
-// ✅ Pinia 인스턴스 생성
-const pinia = createPinia();
-
-// ✅ 앱 생성 및 등록 순서 중요
+// ✅ 앱 생성
 const app = createApp(App);
-app.use(pinia); // 🟢 반드시 먼저 등록!
+app.use(createPinia());
 app.use(router);
+app.use(BootstrapVue3);
 app.use(BootstrapIconsPlugin);
-
 app.mount("#app");

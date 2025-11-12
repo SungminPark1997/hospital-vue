@@ -6,7 +6,7 @@
 import { ref, onMounted } from "vue";
 import { getActiveHospitals } from "../api/hospitalApi";
 import type { Hospital } from "../api/hospitalApi";
-import { useKakaoMap } from "../composables/useKaKaoMap";
+import { useKakaoMap } from "../composables/useKakaoMap";
 
 const activeHospitals = ref<Hospital[]>([]);
 

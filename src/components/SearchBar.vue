@@ -6,7 +6,7 @@
         v-model="keyword"
         type="text"
         class="search-input"
-        placeholder="병원명, 주소 또는 진료과목을 입력하세요"
+        placeholder="병원명을 입력하세요"
         @keyup.enter="searchHospital"
       />
       <button class="btn" @click="searchHospital">검색</button>
