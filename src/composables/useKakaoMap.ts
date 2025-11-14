@@ -6,6 +6,7 @@ export interface KakaoMapOptions {
   markerText?: string;
 }
 
+// 카카오맵
 export function useKakaoMap(containerId: string, markers: KakaoMapOptions[]) {
   let map: any = null;
   let clusterer: any = null;

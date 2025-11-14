@@ -3,9 +3,7 @@ interface VisitRecord {
   success: boolean;
   message: string;
 }
-interface VisitRecordResponse {
-  success: boolean;
-  message: string;
+interface VisitRecordResponse extends VisitRecord {
   count: number;
   data: any;
 }

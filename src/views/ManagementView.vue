@@ -10,12 +10,7 @@
         @clear="clearSearch"
       />
 
-      <button
-        class="btn btn-primary d-flex align-items-center gap-1 ms-3"
-        @click="openAddModal"
-      >
-        병원 추가
-      </button>
+      <BaseButton @click="clickAddHospital"> 병원 추가 </BaseButton>
     </div>
 
     <!--  목록 -->
@@ -61,6 +56,8 @@ import {
 } from "../api/hospitalApi";
 import HospitalFormModal from "../components/modal/HospitalFormModal.vue";
 import Table from "../components/Table.vue";
+// @ts-ignore 캐시
+import BaseButton from "../components/BaseButton.vue";
 
 // composable 호출
 const {
@@ -90,6 +87,11 @@ const clickHospital = (h: Hospital) => {
   openAddModal();
 };
 
+const clickAddHospital = () => {
+  isEdit.value = false;
+  editHospital.value = null;
+  openAddModal();
+};
 const openAddModal = () => (isAddModalOpen.value = true);
 const closeAddModal = () => (isAddModalOpen.value = false);
 
@@ -113,7 +115,6 @@ const sortBy = (key: string) => {
 
 // ✅ 병원 추가 및 수정
 const handleAddHospital = async (data: Hospital) => {
-  console.log("새 병원 등록 데이터:", data);
   if (!data.bizName) {
     alert("병원명을 입력해주세요.");
     return;

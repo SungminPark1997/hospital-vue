@@ -41,6 +41,7 @@ const password = ref("");
 const message = ref("");
 const router = useRouter();
 
+// 회원가입
 const register = async () => {
   try {
     const res = await registerUser({

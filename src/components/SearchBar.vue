@@ -9,8 +9,8 @@
         placeholder="병원명을 입력하세요"
         @keyup.enter="searchHospital"
       />
-      <button class="btn" @click="searchHospital">검색</button>
-      <button class="btn ghost sm" @click="clearSearch">초기화</button>
+      <BaseButton class="btn" @click="searchHospital">검색</BaseButton>
+      <BaseButton class="btn white" @click="clearSearch">초기화</BaseButton>
     </div>
 
     <!-- 필터 영역 -->
@@ -31,6 +31,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+// @ts-ignore 캐시 때문에 잠깐
+import BaseButton from "./BaseButton.vue";
 
 const keyword = ref<string>("");
 const selectedRegion = ref<string>("");

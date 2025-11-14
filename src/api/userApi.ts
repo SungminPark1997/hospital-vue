@@ -23,3 +23,11 @@ export async function loginUser(payload: {
   const { data } = await api.post("/user/login", payload);
   return data;
 }
+export async function changePassword(payload: {
+  username: string;
+  oldPassword: string;
+  newPassword: string;
+}) {
+  const { data } = await api.post("/user/change-password", payload);
+  return data;
+}

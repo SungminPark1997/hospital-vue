@@ -35,7 +35,7 @@
         emptyText="검색 결과가 없습니다."
         @select="openModal"
       />
-
+      <!--페이지 그리기-->
       <Pagination
         v-if="hasSearched && totalPages > 1"
         :page="currentPage"
@@ -101,6 +101,7 @@ import HospitalInfModal from "../components/modal/HospitalInfModal.vue";
 import { getAllVisits, getTodayVisits } from "../api/visitApi";
 import StatItem from "../components/StatItem.vue";
 
+// 병원검색 composable 호출
 const {
   keyword,
   selectedRegion,
@@ -120,6 +121,7 @@ const hasSearched = ref(false);
 const stats = ref({ total: 0, open: 0, closed: 0 });
 const todayVisits = ref(0);
 const allVisits = ref(0);
+
 // 검색 실행
 const onSearch = async (payload: {
   keyword: string;
@@ -132,7 +134,6 @@ const onSearch = async (payload: {
 
 // 모달 열기
 const openModal = (hospital: Hospital) => {
-  console.log("모달 열기:", hospital.bizName);
   selectedHospital.value = hospital;
 };
 const closeModal = () => {

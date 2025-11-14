@@ -8,7 +8,7 @@ import { getSearchHospitals, type Hospital } from "../api/hospitalApi";
  * - API 호출
  */
 export function useHospitalSearch() {
-  // ✅ 상태 정의
+  //  상태 정의
   const keyword = ref("");
   const selectedRegion = ref("");
   const status = ref("");
@@ -18,11 +18,11 @@ export function useHospitalSearch() {
   const currentPage = ref(1);
   const hasSearched = ref(false);
 
-  // ✅ 정렬 상태
+  //  정렬 상태
   const sortKey = ref("created_at");
   const sortOrder = ref("DESC");
 
-  // ✅ 검색 함수
+  //  검색 함수
   const searchHospitals = async (
     payload: { keyword: string; region: string; status: string },
     page = 1
@@ -34,8 +34,8 @@ export function useHospitalSearch() {
         payload.region || "",
         payload.status || "",
         page,
-        undefined, // ✅ size는 서버 기본값(10) 사용
-        sortKey.value || undefined, // ✅ 선택적으로만 전달
+        undefined, //  size는 서버 기본값(10) 사용
+        sortKey.value || undefined, //  선택적으로만 전달
         sortOrder.value || undefined
       );
 
@@ -51,7 +51,7 @@ export function useHospitalSearch() {
     }
   };
 
-  // ✅ 초기화 함수
+  //  초기화 함수
   const clearSearch = () => {
     keyword.value = "";
     selectedRegion.value = "";
@@ -63,7 +63,7 @@ export function useHospitalSearch() {
     sortOrder.value = "DESC";
   };
 
-  // ✅ 페이지 변경
+  //  페이지 변경
   const onPageChange = async (page: number) => {
     await searchHospitals(
       {

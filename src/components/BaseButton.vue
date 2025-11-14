@@ -1,5 +1,5 @@
 <template>
-  <button :type="type" :class="['base-btn', color]" @click="$emit('click')">
+  <button :type="type" :class="['base-btn', color]" @click="emit('click')">
     <slot />
   </button>
 </template>
@@ -15,11 +15,12 @@ defineProps({
     default: "primary", // primary | success | danger | gray 등
   },
 });
+
+const emit = defineEmits(["click"]);
 </script>
 
 <style scoped>
 .base-btn {
-  width: 100%;
   padding: 10px;
   color: white;
   border: none;
@@ -35,6 +36,15 @@ defineProps({
 .base-btn.primary:hover {
   background-color: #0069d9;
 }
+.base-btn.white {
+  background-color: white;
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.base-btn.white:hover {
+  background-color: wheat;
+}
 
 .base-btn.success {
   background-color: #28a745;
@@ -48,5 +58,11 @@ defineProps({
 }
 .base-btn.danger:hover {
   background-color: #c82333;
+}
+.base-btn.gray {
+  background-color: #6c757d;
+}
+.base-btn.gray:hover {
+  background-color: #5a6268;
 }
 </style>

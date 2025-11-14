@@ -51,7 +51,6 @@ const login = async () => {
     if (res.success === false) {
       throwError(new Error(res.message), "로그인 실패");
     } else {
-      console.log("로그인 성공:", res);
       auth.login(res.data.token, res.data.username, res.data.role);
       console.log(res.role);
       alert("로그인 성공!");
