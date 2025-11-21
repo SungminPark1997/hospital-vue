@@ -6,6 +6,7 @@
         <li><router-link to="/">홈</router-link></li>
         <li><router-link to="/map">지도</router-link></li>
         <li><router-link to="/management">병원 관리</router-link></li>
+        <li><router-link to="/chat">채팅</router-link></li>
       </ul>
 
       <!-- 오른쪽 로그인 / 로그아웃 -->
@@ -17,7 +18,7 @@
 
         <template v-else>
           <BaseButton color="gray" @click="goMyPage">마이페이지</BaseButton>
-          <BaseButton color="danger" @click="logout">로그아웃</BaseButton>
+          <BaseButton color="danger" @click="logout">로그아웃ㅇ</BaseButton>
         </template>
       </div>
     </nav>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-// @ts-ignore 캐시 때문에 잠깐
 import Header from "./components/Header.vue";
 
 import { registerVisit } from "./api/visitApi";

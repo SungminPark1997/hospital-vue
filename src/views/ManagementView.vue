@@ -56,7 +56,7 @@ import {
 } from "../api/hospitalApi";
 import HospitalFormModal from "../components/modal/HospitalFormModal.vue";
 import Table from "../components/Table.vue";
-// @ts-ignore 캐시
+
 import BaseButton from "../components/BaseButton.vue";
 
 // composable 호출

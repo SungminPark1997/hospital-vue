@@ -1,5 +1,8 @@
 import api from "./axios"; // 공통 axios 인스턴스
-
+export interface User {
+  id: number;
+  name: string;
+}
 interface RegisterResponse {
   success: boolean;
   message: string;
@@ -29,5 +32,11 @@ export async function changePassword(payload: {
   newPassword: string;
 }) {
   const { data } = await api.post("/user/change-password", payload);
+  return data;
+}
+
+// ✅ 모든 사용자 정보 가져오기 (관리자용)
+export async function getAllUsers() {
+  const { data } = await api.get("/user/all");
   return data;
 }

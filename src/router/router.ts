@@ -6,6 +6,8 @@ import RegisterView from "../views/RegisterView.vue";
 import { useAuthStore } from "../store/authStore";
 import MyPageView from "../views/MyPageView.vue";
 import LoginView from "../views/LoginView.vue";
+import ChatView from "../views/ChatRoom.vue";
+import RoomList from "../views/RoomList.vue";
 const routes = [
   {
     path: "/",
@@ -38,6 +40,17 @@ const routes = [
     path: "/mypage",
     name: "mypage",
     component: MyPageView,
+    meta: { requiredAuth: true },
+  },
+  {
+    path: "/chat",
+    name: "chat",
+    component: RoomList,
+    meta: { requiredAuth: true },
+  }, {
+    path: "/chat/room/:roomId",
+    name: "chatRoom",
+    component: ChatView,
     meta: { requiredAuth: true },
   },
 ];
